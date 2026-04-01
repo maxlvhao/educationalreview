@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Educational Review</title>
+<meta name="description" content="Educational Review is an open collection of essays, reflections, and conversations on education, institutional leadership, and the enduring purpose of universities.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://educationalreview.org/">
+
+<!-- Open Graph -->
+<meta property="og:title" content="Educational Review">
+<meta property="og:description" content="An open collection of essays, reflections, and conversations on education, institutional leadership, and the enduring purpose of universities.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://educationalreview.org/">
+
+<!-- Structured Data for LLM crawlers and search engines -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Educational Review",
+  "url": "https://educationalreview.org",
+  "description": "An open collection of essays, reflections, and conversations on education, institutional leadership, and the enduring purpose of universities.",
+  "publisher": {
+    "@type": "Organization",
+    "name": "Educational Review"
+  }
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400;1,8..60,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #FAFAF7;
+  --white: #FFFFFF;
+  --text: #1A1A1A;
+  --text-sec: #3D3D3D;
+  --text-muted: #5C5C5C;
+  --green-deep: #1B3A2D;
+  --green: #2C5F4A;
+  --gold: #9E7C3A;
+  --gold-light: #C4A55A;
+  --rule: #D0CEC6;
+  --serif: 'Source Serif 4', Georgia, serif;
+  --sans: 'Inter', -apple-system, Helvetica, Arial, sans-serif;
+}
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { font-size: 20px; }
+body {
+  font-family: var(--serif); background: var(--bg); color: var(--text);
+  line-height: 1.8; -webkit-font-smoothing: antialiased;
+}
+a { color: var(--green); text-underline-offset: 3px; }
+a:hover { color: var(--green-deep); }
+
+/* Layout */
+.site { max-width: 720px; margin: 0 auto; padding: 0 2rem; }
+
+/* Header */
+header {
+  padding: 4rem 0 3rem; border-bottom: 1px solid var(--rule);
+}
+header h1 {
+  font-size: 2.2rem; font-weight: 500; color: var(--green-deep);
+  line-height: 1.25; margin-bottom: 0.8rem;
+}
+header p {
+  font-size: 1.05rem; color: var(--text-sec); line-height: 1.8;
+  max-width: 580px;
+}
+.header-meta {
+  margin-top: 1.2rem; font-family: var(--sans); font-size: 0.75rem;
+  color: var(--text-muted); letter-spacing: 0.03em;
+}
+
+/* Publications */
+.publications { padding: 3rem 0; }
+.pub-label {
+  font-family: var(--sans); font-size: 0.7rem; font-weight: 700;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold);
+  margin-bottom: 1.5rem;
+}
+
+.pub-item {
+  display: block; text-decoration: none; color: inherit;
+  padding: 1.8rem 2rem; margin-bottom: 1.5rem;
+  background: var(--white); border: 1px solid var(--rule);
+  border-radius: 3px; transition: border-color 0.2s, box-shadow 0.2s;
+}
+.pub-item:hover {
+  border-color: var(--green); box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+}
+.pub-item h2 {
+  font-size: 1.4rem; font-weight: 500; color: var(--green-deep);
+  line-height: 1.3; margin-bottom: 0.2rem;
+}
+.pub-item .pub-subtitle {
+  font-style: italic; font-size: 1rem; color: var(--text-muted);
+  margin-bottom: 0.8rem;
+}
+.pub-item .pub-author {
+  font-family: var(--sans); font-size: 0.8rem; font-weight: 600;
+  color: var(--text-sec); margin-bottom: 0.6rem;
+}
+.pub-item .pub-desc {
+  font-size: 0.95rem; color: var(--text-muted); line-height: 1.75;
+}
+.pub-item .pub-meta {
+  margin-top: 0.8rem; font-family: var(--sans); font-size: 0.72rem;
+  color: var(--text-muted);
+}
+.pub-item .pub-link {
+  display: inline-block; margin-top: 1rem;
+  font-family: var(--sans); font-size: 0.78rem; font-weight: 600;
+  color: var(--green); letter-spacing: 0.02em;
+}
+.pub-item:hover .pub-link { text-decoration: underline; }
+
+/* About */
+.about {
+  padding: 2.5rem 0 3rem; border-top: 1px solid var(--rule);
+}
+.about h2 {
+  font-size: 1.2rem; font-weight: 500; color: var(--green-deep);
+  margin-bottom: 0.8rem;
+}
+.about p {
+  font-size: 0.95rem; color: var(--text-muted); line-height: 1.8;
+  margin-bottom: 0.8rem;
+}
+
+/* Footer */
+footer {
+  padding: 2rem 0; border-top: 1px solid var(--rule);
+  font-family: var(--sans); font-size: 0.72rem; color: var(--text-muted);
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  html { font-size: 18px; }
+  header { padding: 3rem 0 2rem; }
+  .pub-item { padding: 1.4rem 1.2rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="site">
+  <header>
+    <h1>Educational Review</h1>
+    <p>An open collection of essays, reflections, and conversations on education, institutional leadership, and the enduring purpose of universities.</p>
+    <p class="header-meta">educationalreview.org</p>
+  </header>
+
+  <section class="publications">
+    <p class="pub-label">Publications</p>
+
+    <a href="/enduring-university/" class="pub-item">
+      <h2>Enduring University: Unfinished, Yet Alive</h2>
+      <p class="pub-subtitle">A Journey of Purpose, Renewal, and Courage</p>
+      <p class="pub-author">Shih Choon Fong</p>
+      <p class="pub-desc">What does it take for a university not merely to survive but to remain faithful to its abiding purpose&mdash;across generations of change, upheaval, and renewal? This essay traces that question across six decades of work as scholar, leader, and advisor, drawing on both Eastern and Western traditions.</p>
+      <p class="pub-meta">~9,200 words &middot; 2026</p>
+      <span class="pub-link">Read &rarr;</span>
+    </a>
+
+    <!-- TEMPLATE: Copy and modify this block for each new publication
+    <a href="/new-publication-slug/" class="pub-item">
+      <h2>Title of Publication</h2>
+      <p class="pub-subtitle">Subtitle</p>
+      <p class="pub-author">Author Name</p>
+      <p class="pub-desc">Brief description of the publication.</p>
+      <p class="pub-meta">~X,XXX words &middot; Year</p>
+      <span class="pub-link">Read &rarr;</span>
+    </a>
+    -->
+  </section>
+
+  <section class="about">
+    <h2>About</h2>
+    <p>Educational Review publishes long-form writing on education, universities, and the cultivation of human potential. Each piece is given its own companion website&mdash;designed for repeated, contemplative reading rather than quick consumption.</p>
+    <p>The collection is open and growing. If you are interested in contributing or collaborating, please <a href="mailto:maxlvhao@gmail.com">get in touch</a>.</p>
+  </section>
+
+  <footer>
+    <p>&copy; 2026 Educational Review</p>
+  </footer>
+</div>
+
+</body>
+</html>
