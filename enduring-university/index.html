@@ -1431,11 +1431,21 @@ essaySubItems.forEach(item => {
   if (el) essaySections.push({ id, el });
 });
 
-// Show/hide nav based on scroll past hero
+// Show/hide nav based on scroll past hero, hide when footer is in view
+const siteFooter = document.querySelector('footer');
 let navVisible = false;
 function updateNavVisibility() {
   const heroBottom = document.getElementById('hero').offsetHeight * 0.5;
-  const shouldShow = window.scrollY > heroBottom;
+  const pastHero = window.scrollY > heroBottom;
+
+  // Check if the footer overlaps the nav's vertical space
+  let footerInView = false;
+  if (siteFooter) {
+    const footerRect = siteFooter.getBoundingClientRect();
+    footerInView = footerRect.top < window.innerHeight;
+  }
+
+  const shouldShow = pastHero && !footerInView;
   if (shouldShow !== navVisible) {
     navVisible = shouldShow;
     scrollNav.classList.toggle('visible', shouldShow);
