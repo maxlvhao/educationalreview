@@ -79,7 +79,7 @@
    ═══════════════════════════════════════ */
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-html { scroll-behavior: smooth; font-size: 20px; scroll-padding-top: 80px; }
+html { scroll-behavior: smooth; font-size: 20px; }
 
 body {
   font-family: var(--serif);
@@ -97,42 +97,295 @@ a:hover { color: var(--green-deep); }
 ::selection { background: rgba(44,95,74,0.15); }
 
 /* ═══════════════════════════════════════
-   NAVIGATION
+   VERTICAL SCROLL SPY NAVIGATION
    ═══════════════════════════════════════ */
-.site-nav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-  background: rgba(250,250,247,0.95);
+.scroll-nav {
+  position: fixed;
+  right: 2.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 100;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+.scroll-nav.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.scroll-nav__list {
+  list-style: none;
+  position: relative;
+  padding: 0;
+}
+
+/* The vertical line */
+.scroll-nav__list::before {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 4px;
+  bottom: 4px;
+  width: 1px;
+  background: var(--rule);
+}
+
+/* Progress fill on the line */
+.scroll-nav__progress {
+  position: absolute;
+  left: 5px;
+  top: 4px;
+  width: 1px;
+  height: 0%;
+  background: var(--green);
+  transition: height 0.3s ease;
+  z-index: 1;
+}
+
+.scroll-nav__item {
+  position: relative;
+  padding-left: 24px;
+  margin-bottom: 1.1rem;
+}
+.scroll-nav__item:last-child { margin-bottom: 0; }
+
+/* The dot */
+.scroll-nav__dot {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  border: 1.5px solid var(--rule);
+  background: var(--bg);
+  transition: border-color 0.3s, background 0.3s, transform 0.3s;
+  z-index: 2;
+}
+
+.scroll-nav__item.active .scroll-nav__dot {
+  border-color: var(--green);
+  background: var(--green);
+  transform: translateY(-50%) scale(1.2);
+}
+
+.scroll-nav__item.visited .scroll-nav__dot {
+  border-color: var(--green);
+  background: var(--green);
+}
+
+/* The label */
+.scroll-nav__link {
+  display: block;
+  font-family: var(--sans);
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  text-decoration: none;
+  padding: 0.15rem 0;
+  transition: color 0.2s;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+
+.scroll-nav__item.active .scroll-nav__link {
+  color: var(--green-deep);
+  font-weight: 700;
+}
+
+.scroll-nav__link:hover {
+  color: var(--green-deep);
+}
+
+/* Brand label at top of scroll nav */
+.scroll-nav__brand {
+  font-family: var(--serif);
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--green-deep);
+  text-decoration: none;
+  display: block;
+  margin-bottom: 1.5rem;
+  padding-left: 0;
+  letter-spacing: -0.01em;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+.scroll-nav__brand:hover { opacity: 1; }
+
+/* ── Dark section adaptation ── */
+.scroll-nav.on-dark .scroll-nav__brand {
+  color: rgba(250,250,247,0.6);
+}
+.scroll-nav.on-dark .scroll-nav__list::before {
+  background: rgba(255,255,255,0.2);
+}
+.scroll-nav.on-dark .scroll-nav__progress {
+  background: var(--gold-light);
+}
+.scroll-nav.on-dark .scroll-nav__dot {
+  border-color: rgba(255,255,255,0.25);
+  background: var(--green-deep);
+}
+.scroll-nav.on-dark .scroll-nav__item.active .scroll-nav__dot,
+.scroll-nav.on-dark .scroll-nav__item.visited .scroll-nav__dot {
+  border-color: var(--gold-light);
+  background: var(--gold-light);
+}
+.scroll-nav.on-dark .scroll-nav__link {
+  color: rgba(250,250,247,0.45);
+}
+.scroll-nav.on-dark .scroll-nav__item.active .scroll-nav__link {
+  color: rgba(250,250,247,0.95);
+}
+.scroll-nav.on-dark .scroll-nav__link:hover {
+  color: rgba(250,250,247,0.8);
+}
+
+/* ── Essay sub-navigation ── */
+.scroll-nav__subnav {
+  list-style: none;
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition: max-height 0.4s ease, opacity 0.3s ease, margin 0.3s ease;
+  margin: 0;
+  padding-left: 0.2rem;
+}
+.scroll-nav__item.active .scroll-nav__subnav,
+.scroll-nav__item.subnav-open .scroll-nav__subnav {
+  max-height: 300px;
+  opacity: 1;
+  margin: 0.4rem 0 0.2rem;
+}
+.scroll-nav__subitem {
+  padding: 0.2rem 0;
+}
+.scroll-nav__subitem a {
+  display: block;
+  font-family: var(--sans);
+  font-size: 0.58rem;
+  font-weight: 400;
+  color: var(--text-muted);
+  text-decoration: none;
+  letter-spacing: 0.02em;
+  padding: 0.12rem 0;
+  transition: color 0.2s;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+.scroll-nav__subitem a:hover {
+  color: var(--green-deep);
+}
+.scroll-nav__subitem.active a {
+  color: var(--green-deep);
+  font-weight: 700;
+}
+/* Dark variant for subnav */
+.scroll-nav.on-dark .scroll-nav__subitem a {
+  color: rgba(250,250,247,0.4);
+}
+.scroll-nav.on-dark .scroll-nav__subitem.active a {
+  color: rgba(250,250,247,0.9);
+}
+.scroll-nav.on-dark .scroll-nav__subitem a:hover {
+  color: rgba(250,250,247,0.7);
+}
+
+/* ── Mobile bottom nav ── */
+.mobile-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: rgba(250,250,247,0.97);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border-bottom: 1px solid transparent;
-  transition: border-color 0.3s, box-shadow 0.3s;
+  border-top: 1px solid var(--rule);
+  transform: translateY(100%);
+  transition: transform 0.4s ease;
 }
-.site-nav.scrolled {
-  border-bottom-color: var(--rule);
-  box-shadow: 0 1px 8px rgba(0,0,0,0.04);
+.mobile-nav.visible {
+  transform: translateY(0);
 }
-.nav-inner {
-  max-width: 1200px; margin: 0 auto;
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0 2rem; height: 72px;
+
+.mobile-nav__toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.9rem 1.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--green-deep);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
-.nav-brand {
-  font-family: var(--serif); font-size: 1.15rem; font-weight: 600;
-  color: var(--green-deep); text-decoration: none; letter-spacing: -0.01em;
+.mobile-nav__toggle svg {
+  width: 14px;
+  height: 14px;
+  transition: transform 0.3s;
 }
-.nav-links { display: flex; gap: 1.8rem; list-style: none; }
-.nav-links a {
-  font-family: var(--sans); font-size: 0.78rem; font-weight: 500;
-  color: var(--text-muted); text-decoration: none; letter-spacing: 0.04em;
-  padding: 0.4rem 0; transition: color 0.2s;
+.mobile-nav.open .mobile-nav__toggle svg {
+  transform: rotate(180deg);
 }
-.nav-links a:hover { color: var(--green-deep); }
-.nav-toggle {
-  display: none; background: none; border: none; cursor: pointer; padding: 10px;
+
+.mobile-nav__current {
+  font-weight: 400;
+  color: var(--text-muted);
+  margin-left: 0.3rem;
 }
-.nav-toggle span {
-  display: block; width: 24px; height: 2px; background: var(--text);
-  margin: 6px 0; transition: 0.3s;
+
+.mobile-nav__list {
+  list-style: none;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+  border-top: 1px solid var(--rule-light);
+}
+.mobile-nav.open .mobile-nav__list {
+  max-height: 400px;
+}
+
+.mobile-nav__item a {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.75rem 1.5rem;
+  font-family: var(--sans);
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-decoration: none;
+  border-bottom: 1px solid var(--rule-light);
+  transition: color 0.2s, background 0.2s;
+}
+.mobile-nav__item a:hover,
+.mobile-nav__item.active a {
+  color: var(--green-deep);
+  background: rgba(44,95,74,0.04);
+}
+.mobile-nav__item.active a {
+  font-weight: 700;
+}
+.mobile-nav__dot-indicator {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--rule);
+  flex-shrink: 0;
+}
+.mobile-nav__item.active .mobile-nav__dot-indicator {
+  background: var(--green);
 }
 
 /* ═══════════════════════════════════════
@@ -546,14 +799,9 @@ footer a:hover { text-decoration: underline; }
   .author-grid { grid-template-columns: 1fr; gap: 2rem; }
   .author-sidebar { position: static; }
   .dives-grid { grid-template-columns: 1fr; }
-  .nav-links { display: none; }
-  .nav-toggle { display: block; }
-  .site-nav.nav-open .nav-links {
-    display: flex; flex-direction: column; position: absolute;
-    top: 72px; left: 0; right: 0; background: var(--bg);
-    padding: 1.5rem 2rem 2rem; border-bottom: 1px solid var(--rule);
-    gap: 0.8rem;
-  }
+  .scroll-nav { display: none; }
+  .mobile-nav { display: block; }
+  .back-to-top { bottom: 4.5rem; }
 }
 @media (max-width: 600px) {
   html { font-size: 18px; }
@@ -568,23 +816,74 @@ footer a:hover { text-decoration: underline; }
 <body>
 
 <!-- ═══════ NAVIGATION ═══════ -->
-<nav class="site-nav" id="siteNav">
-  <div class="nav-inner">
-    <a href="#hero" class="nav-brand">The Enduring University</a>
-    <ul class="nav-links" id="navLinks">
-      <li><a href="#about">About the Essay</a></li>
-      <li><a href="#structure">Structure</a></li>
-      <li><a href="#the-3cs">The 3Cs</a></li>
-      <li><a href="#the-tree">The Tree</a></li>
-      <li><a href="#nus">At NUS</a></li>
-      <li><a href="#author">Author</a></li>
-      <li><a href="#deep-dives">Deep Dives</a></li>
-      <li><a href="#full-essay">Read</a></li>
-    </ul>
-    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
-      <span></span><span></span><span></span>
-    </button>
-  </div>
+<!-- ═══════ VERTICAL SCROLL NAV (Desktop) ═══════ -->
+<nav class="scroll-nav" id="scrollNav" aria-label="Page sections">
+  <a href="#hero" class="scroll-nav__brand">The Enduring<br>University</a>
+  <ul class="scroll-nav__list">
+    <div class="scroll-nav__progress" id="scrollProgress"></div>
+    <li class="scroll-nav__item active" data-section="hero">
+      <span class="scroll-nav__dot"></span>
+      <a href="#hero" class="scroll-nav__link">Home</a>
+    </li>
+    <li class="scroll-nav__item" data-section="about">
+      <span class="scroll-nav__dot"></span>
+      <a href="#about" class="scroll-nav__link">About</a>
+    </li>
+    <li class="scroll-nav__item" data-section="structure">
+      <span class="scroll-nav__dot"></span>
+      <a href="#structure" class="scroll-nav__link">Structure</a>
+    </li>
+    <li class="scroll-nav__item" data-section="the-3cs">
+      <span class="scroll-nav__dot"></span>
+      <a href="#the-3cs" class="scroll-nav__link">The 3Cs</a>
+    </li>
+    <li class="scroll-nav__item" data-section="the-tree">
+      <span class="scroll-nav__dot"></span>
+      <a href="#the-tree" class="scroll-nav__link">The Tree</a>
+    </li>
+    <li class="scroll-nav__item" data-section="nus">
+      <span class="scroll-nav__dot"></span>
+      <a href="#nus" class="scroll-nav__link">At NUS</a>
+    </li>
+    <li class="scroll-nav__item" data-section="author">
+      <span class="scroll-nav__dot"></span>
+      <a href="#author" class="scroll-nav__link">Author</a>
+    </li>
+    <li class="scroll-nav__item" data-section="deep-dives">
+      <span class="scroll-nav__dot"></span>
+      <a href="#deep-dives" class="scroll-nav__link">Deep Dives</a>
+    </li>
+    <li class="scroll-nav__item" data-section="full-essay">
+      <span class="scroll-nav__dot"></span>
+      <a href="#full-essay" class="scroll-nav__link">Read</a>
+      <ul class="scroll-nav__subnav" id="essaySubnav">
+        <li class="scroll-nav__subitem" data-essay-section="essay-preface"><a href="#essay-preface">Preface</a></li>
+        <li class="scroll-nav__subitem" data-essay-section="essay-part-1"><a href="#essay-part-1">I &middot; Purpose</a></li>
+        <li class="scroll-nav__subitem" data-essay-section="essay-part-2"><a href="#essay-part-2">II &middot; Stewardship</a></li>
+        <li class="scroll-nav__subitem" data-essay-section="essay-part-3"><a href="#essay-part-3">III &middot; Culture</a></li>
+        <li class="scroll-nav__subitem" data-essay-section="essay-epilogue"><a href="#essay-epilogue">Epilogue</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+<!-- ═══════ MOBILE BOTTOM NAV ═══════ -->
+<nav class="mobile-nav" id="mobileNav" aria-label="Page sections">
+  <button class="mobile-nav__toggle" id="mobileNavToggle">
+    <span id="mobileNavLabel">Home</span>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+  </button>
+  <ul class="mobile-nav__list" id="mobileNavList">
+    <li class="mobile-nav__item active" data-section="hero"><a href="#hero"><span class="mobile-nav__dot-indicator"></span>Home</a></li>
+    <li class="mobile-nav__item" data-section="about"><a href="#about"><span class="mobile-nav__dot-indicator"></span>About</a></li>
+    <li class="mobile-nav__item" data-section="structure"><a href="#structure"><span class="mobile-nav__dot-indicator"></span>Structure</a></li>
+    <li class="mobile-nav__item" data-section="the-3cs"><a href="#the-3cs"><span class="mobile-nav__dot-indicator"></span>The 3Cs</a></li>
+    <li class="mobile-nav__item" data-section="the-tree"><a href="#the-tree"><span class="mobile-nav__dot-indicator"></span>The Tree</a></li>
+    <li class="mobile-nav__item" data-section="nus"><a href="#nus"><span class="mobile-nav__dot-indicator"></span>At NUS</a></li>
+    <li class="mobile-nav__item" data-section="author"><a href="#author"><span class="mobile-nav__dot-indicator"></span>Author</a></li>
+    <li class="mobile-nav__item" data-section="deep-dives"><a href="#deep-dives"><span class="mobile-nav__dot-indicator"></span>Deep Dives</a></li>
+    <li class="mobile-nav__item" data-section="full-essay"><a href="#full-essay"><span class="mobile-nav__dot-indicator"></span>Read</a></li>
+  </ul>
 </nav>
 
 <!-- ═══════ HERO ═══════ -->
@@ -1024,7 +1323,6 @@ footer a:hover { text-decoration: underline; }
       <p>And so the university itself lives on&mdash;not because it possesses the truth, but because it renews the human capacities that sustain the search for truth.</p>
       <blockquote>And so we carry forward what endures&mdash;passing it on, as it was once passed to us, in the quiet rhythms of renewal: one curious mind, one steady heart, one light step&mdash;and the courage, always, to begin again.</blockquote>
 
-      <p class="word-count">~ 9,264 words</p>
     </div>
   </div>
 </section>
@@ -1047,24 +1345,160 @@ footer a:hover { text-decoration: underline; }
 <!-- ═══════ JAVASCRIPT ═══════ -->
 <script>
 // ── Navigation scroll effect ──
-const nav = document.getElementById('siteNav');
-const navToggle = document.getElementById('navToggle');
-const navLinks = document.getElementById('navLinks');
+// ── Scroll Spy Navigation ──
+const scrollNav = document.getElementById('scrollNav');
+const mobileNav = document.getElementById('mobileNav');
+const mobileNavToggle = document.getElementById('mobileNavToggle');
+const mobileNavList = document.getElementById('mobileNavList');
+const mobileNavLabel = document.getElementById('mobileNavLabel');
+const scrollProgress = document.getElementById('scrollProgress');
 
-window.addEventListener('scroll', () => {
-  nav.classList.toggle('scrolled', window.scrollY > 60);
+const navItems = document.querySelectorAll('.scroll-nav__item');
+const mobileItems = document.querySelectorAll('.mobile-nav__item');
+const sections = [];
+
+// Collect all sections referenced by nav
+navItems.forEach(item => {
+  const id = item.dataset.section;
+  const el = document.getElementById(id);
+  if (el) sections.push({ id, el });
 });
 
-navToggle.addEventListener('click', () => {
-  nav.classList.toggle('nav-open');
+// Labels for mobile nav display
+const sectionLabels = {};
+navItems.forEach(item => {
+  sectionLabels[item.dataset.section] = item.querySelector('.scroll-nav__link').textContent;
+});
+
+// Dark sections — sections with dark backgrounds where nav needs light colors
+const darkSections = document.querySelectorAll('.section-3cs, .section-cta');
+
+// Essay sub-sections for sub-nav
+const essaySubItems = document.querySelectorAll('.scroll-nav__subitem');
+const essaySections = [];
+essaySubItems.forEach(item => {
+  const id = item.dataset.essaySection;
+  const el = document.getElementById(id);
+  if (el) essaySections.push({ id, el });
+});
+
+// Show/hide nav based on scroll past hero
+let navVisible = false;
+function updateNavVisibility() {
+  const heroBottom = document.getElementById('hero').offsetHeight * 0.5;
+  const shouldShow = window.scrollY > heroBottom;
+  if (shouldShow !== navVisible) {
+    navVisible = shouldShow;
+    scrollNav.classList.toggle('visible', shouldShow);
+    mobileNav.classList.toggle('visible', shouldShow);
+  }
+}
+
+// Detect if scroll nav overlaps a dark section
+function updateDarkMode() {
+  const navRect = scrollNav.getBoundingClientRect();
+  const navMidY = navRect.top + navRect.height / 2;
+  let onDark = false;
+
+  darkSections.forEach(sec => {
+    const rect = sec.getBoundingClientRect();
+    if (navMidY >= rect.top && navMidY <= rect.bottom) {
+      onDark = true;
+    }
+  });
+
+  scrollNav.classList.toggle('on-dark', onDark);
+}
+
+// Determine active section
+function updateActiveSection() {
+  const scrollY = window.scrollY + window.innerHeight * 0.35;
+  let activeId = sections[0].id;
+
+  for (let i = sections.length - 1; i >= 0; i--) {
+    if (scrollY >= sections[i].el.offsetTop) {
+      activeId = sections[i].id;
+      break;
+    }
+  }
+
+  // Update desktop nav
+  navItems.forEach(item => {
+    const isActive = item.dataset.section === activeId;
+    item.classList.toggle('active', isActive);
+  });
+
+  // Mark visited dots (all sections above active)
+  let foundActive = false;
+  navItems.forEach(item => {
+    if (item.dataset.section === activeId) foundActive = true;
+    if (!foundActive) {
+      item.classList.add('visited');
+    } else if (item.dataset.section !== activeId) {
+      item.classList.remove('visited');
+    }
+  });
+
+  // Update mobile nav
+  mobileItems.forEach(item => {
+    item.classList.toggle('active', item.dataset.section === activeId);
+  });
+  mobileNavLabel.textContent = sectionLabels[activeId] || 'Navigate';
+
+  // Update progress line
+  const activeIndex = sections.findIndex(s => s.id === activeId);
+  if (navItems.length > 1) {
+    const pct = (activeIndex / (navItems.length - 1)) * 100;
+    scrollProgress.style.height = pct + '%';
+  }
+
+  // Essay sub-nav: highlight active sub-section when in "Read"
+  if (activeId === 'full-essay' && essaySections.length > 0) {
+    let activeSubId = essaySections[0].id;
+    for (let i = essaySections.length - 1; i >= 0; i--) {
+      if (scrollY >= essaySections[i].el.offsetTop) {
+        activeSubId = essaySections[i].id;
+        break;
+      }
+    }
+    essaySubItems.forEach(item => {
+      item.classList.toggle('active', item.dataset.essaySection === activeSubId);
+    });
+  } else {
+    essaySubItems.forEach(item => item.classList.remove('active'));
+  }
+}
+
+// Throttled scroll handler
+let scrollTicking = false;
+window.addEventListener('scroll', () => {
+  if (!scrollTicking) {
+    requestAnimationFrame(() => {
+      updateNavVisibility();
+      updateDarkMode();
+      updateActiveSection();
+      scrollTicking = false;
+    });
+    scrollTicking = true;
+  }
+});
+
+// Mobile nav toggle
+mobileNavToggle.addEventListener('click', () => {
+  mobileNav.classList.toggle('open');
 });
 
 // Close mobile nav on link click
-document.querySelectorAll('.nav-links a').forEach(link => {
+mobileNavList.querySelectorAll('a').forEach(link => {
   link.addEventListener('click', () => {
-    nav.classList.remove('nav-open');
+    mobileNav.classList.remove('open');
   });
 });
+
+// Initial state
+updateNavVisibility();
+updateDarkMode();
+updateActiveSection();
 
 // ── Scroll reveal ──
 const revealObserver = new IntersectionObserver((entries) => {
