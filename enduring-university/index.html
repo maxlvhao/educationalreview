@@ -481,8 +481,12 @@ h2.sec-title {
   letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted);
   margin-top: 2.5rem;
 }
+.hero-actions {
+  margin-top: 3rem; display: flex; align-items: center; gap: 1rem;
+  flex-wrap: wrap; justify-content: center;
+}
 .hero-cta {
-  margin-top: 3rem; display: inline-flex; align-items: center; gap: 0.6rem;
+  display: inline-flex; align-items: center; gap: 0.6rem;
   font-family: var(--sans); font-size: 0.82rem; font-weight: 600;
   color: var(--white); background: var(--green); padding: 0.9rem 2rem;
   text-decoration: none; border-radius: 3px; transition: background 0.2s, transform 0.15s;
@@ -490,6 +494,16 @@ h2.sec-title {
 }
 .hero-cta:hover { background: var(--green-deep); color: var(--white); transform: translateY(-1px); }
 .hero-cta svg { width: 16px; height: 16px; }
+.hero-pdf {
+  display: inline-flex; align-items: center; gap: 0.6rem;
+  font-family: var(--sans); font-size: 0.82rem; font-weight: 600;
+  color: var(--green); background: transparent; padding: 0.85rem 1.8rem;
+  text-decoration: none; border-radius: 3px; border: 1.5px solid var(--green);
+  transition: background 0.2s, color 0.2s, transform 0.15s;
+  letter-spacing: 0.03em;
+}
+.hero-pdf:hover { background: var(--green); color: var(--white); transform: translateY(-1px); }
+.hero-pdf svg { width: 16px; height: 16px; }
 .hero-scroll {
   position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
   font-family: var(--sans); font-size: 0.68rem; color: var(--text-muted);
@@ -940,10 +954,16 @@ footer a:hover { text-decoration: underline; }
   <h1>Enduring University:<br>Unfinished, Yet Alive</h1>
   <p class="hero-sub">A Journey of Purpose, Renewal, and Courage</p>
   <p class="hero-author">Shih Choon Fong</p>
-  <a href="#full-essay" class="hero-cta">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
-    Read the Full Essay
-  </a>
+  <div class="hero-actions">
+    <a href="#full-essay" class="hero-cta">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+      Read the Full Essay
+    </a>
+    <a href="enduring-university.pdf" download class="hero-pdf">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Download PDF
+    </a>
+  </div>
   <div class="hero-scroll">Scroll to explore</div>
 </section>
 
